@@ -1,20 +1,36 @@
 import { useEffect, useState } from "react";
 import { getAllUsers, deleteUser } from "../api/users";
+import EditUserForm from "./EditUserForm";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
+  const [editId, setEditId] = useState(null);
+
+  const fetchUsers = () => {
+    getAllUsers().then((res) => setUsers(res.data));
+  };
 
   useEffect(() => {
-    getAllUsers().then((res) => setUsers(res.data));
+    fetchUsers();
   }, []);
 
   const handleDelete = async (id) => {
     await deleteUser(id);
-    setUsers(users.filter((user) => user._id !== id));
+    fetchUsers();
   };
 
   return (
     <div className="p-4">
+      {editId && (
+        <EditUserForm
+          userId={editId}
+          onDone={() => {
+            setEditId(null);
+            fetchUsers();
+          }}
+        />
+      )}
+
       <h1 className="text-2xl font-bold">Users</h1>
       {users.map((user) => (
         <div key={user._id} className="bg-white p-4 m-2 shadow rounded">
@@ -27,6 +43,12 @@ export default function UserList() {
             onClick={() => handleDelete(user._id)}
           >
             Delete
+          </button>
+          <button
+            className="text-green-500"
+            onClick={() => setEditId(user._id)}
+          >
+            Edit
           </button>
         </div>
       ))}
