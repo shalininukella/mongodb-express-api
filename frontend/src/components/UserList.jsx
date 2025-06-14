@@ -5,6 +5,7 @@ import EditUserForm from "./EditUserForm";
 export default function UserList() {
   const [users, setUsers] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchUsers = () => {
     getAllUsers().then((res) => setUsers(res.data));
@@ -19,6 +20,11 @@ export default function UserList() {
     fetchUsers();
   };
 
+  // 🔍 Filtered users based on search term
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="p-4">
       {editId && (
@@ -31,15 +37,25 @@ export default function UserList() {
         />
       )}
 
-      <h1 className="text-2xl font-bold">Users</h1>
-      {users.map((user) => (
+      <h1 className="text-2xl font-bold mb-2">Users</h1>
+
+      {/* 🔍 Search Input */}
+      <input
+        type="text"
+        placeholder="Search users by name"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="border p-2 mb-4 w-full"
+      />
+
+      {filteredUsers.map((user) => (
         <div key={user._id} className="bg-white p-4 m-2 shadow rounded">
           <h2 className="text-lg font-semibold">{user.name}</h2>
           <p>{user.email}</p>
           <p>Age: {user.age}</p>
 
           <button
-            className="text-red-500"
+            className="text-red-500 mr-4"
             onClick={() => handleDelete(user._id)}
           >
             Delete
