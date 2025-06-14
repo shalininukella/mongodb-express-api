@@ -1,4 +1,4 @@
-import User from "../models/User.js";
+import User from "../models/schemas/User.js";
 
 //get all
 export const getAllUsers = async (req, res) => {
@@ -51,10 +51,10 @@ export const updateUser = async (req, res) => {
 
 //delete
 export const deleteUser = async (req, res) => {
-    try {
-        await User.findByIdAndDelete(req.params.id);
-        res.status(200).json({ message: "User deleted successfully" });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };

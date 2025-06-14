@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-// import User from "./models/User";
 import express from "express";
 import users from "./routes/users.js";
 import dotenv from "dotenv";
