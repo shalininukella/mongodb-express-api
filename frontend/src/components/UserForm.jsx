@@ -42,9 +42,7 @@ export default function UserForm() {
       />
       <button className="bg-blue-500 text-white p-2 m-2 rounded" type="submit">
         Add User
-          </button>
-          
-          
+      </button>
     </form>
   );
 }

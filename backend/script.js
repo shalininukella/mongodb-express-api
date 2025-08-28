@@ -3,6 +3,9 @@ import express from "express";
 import users from "./routes/users.js";
 import dotenv from "dotenv";
 import cors from "cors";
+import { logger } from './middlewares/logger.js'
+import { errorHandler } from "./middlewares/errorHandler.js";
+import { notFound } from "./middlewares/notFound.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
@@ -18,10 +21,19 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true}));
+
+//logger middleware
+app.use(logger);
 
 //route handler
 app.use("/api/users", users);
+
+//fallback error 
+app.use(notFound)
+
+//error handler middleware
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
